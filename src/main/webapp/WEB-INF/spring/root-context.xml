@@ -4,6 +4,9 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
+	
+	<bean id="userDao" class="com.me.priyav.dao.UserLoginDao" />
+	<bean id="custDao" class="com.me.priyav.dao.CustomerDao" />
 	<bean id="productDao" class="com.me.priyav.dao.ProductDao" />	
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
 </beans>

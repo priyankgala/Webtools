@@ -4,14 +4,11 @@
 
 
 <script>
-	$(document).ready(
-			function() {
-				$('.table').DataTable(
-						{
-							"lengthMenu" : [ [ 1, 2, 3, 5, 10, -1 ],
-									[ 1, 2, 3, 5, 10, "All" ] ]
-						});
-			});
+	$(document).ready(function() {
+		$('.table').DataTable({
+			"lengthMenu" : [ [ 5, 10, -1 ], [ 5, 10, "All" ] ]
+		});
+	});
 </script>
 
 <div class="container-wrapper">
@@ -33,17 +30,19 @@
 				<tbody>
 					<c:forEach items="${products}" var="product">
 						<tr>
-							<th><img src="<spring:url value="/resources/images/${product.productId}.png" />" alt="image" style="width: 50%" /></th>
+							<th><img
+								src="<spring:url value="/resources/images/${product.productId}.png" />"
+								alt="image" style="width: 50%" /></th>
 							<th>${product.productName}</th>
 							<th>${product.productCategory}</th>
 							<th>${product.productDescription}</th>
 							<th>${product.productPrice}USD</th>
 							<th><a
-								href="<spring:url value="/product/viewProduct/${product.productId}" />"><span
+								href="<spring:url value="/admin/product/viewProduct/${product.productId}" />"><span
 									class="glyphicon glyphicon-info-sign"></span></a> <a
 								href="<spring:url value="/admin/product/deleteProduct/${product.productId}" />"><span
 									class="glyphicon glyphicon-remove"></span></a> <a
-								href="<spring:url value="/admin/product/editProduct/${product.productId}" />"><span
+								href="<spring:url value="/admin/product/updateProduct/${product.productId}" />"><span
 									class="glyphicon glyphicon-pencil"></span></a></th>
 						</tr>
 					</c:forEach>

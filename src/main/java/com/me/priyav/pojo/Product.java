@@ -1,9 +1,12 @@
 package com.me.priyav.pojo;
 
+import java.util.List;
+
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
+import com.me.priyav.pojo.*;
 
 @Entity
 public class Product {
@@ -28,6 +31,9 @@ public class Product {
 
 	@Transient
 	private MultipartFile productImage;
+	
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<CartItem> cartItemList;
 
 	public int getProductId() {
 		return productId;
@@ -83,6 +89,14 @@ public class Product {
 
 	public void setProductImage(MultipartFile productImage) {
 		this.productImage = productImage;
+	}
+
+	public List<CartItem> getCartItemList() {
+		return cartItemList;
+	}
+
+	public void setCartItemList(List<CartItem> cartItemList) {
+		this.cartItemList = cartItemList;
 	}
 
 }

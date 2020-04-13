@@ -14,5 +14,7 @@
 		<mapping class="com.me.priyav.pojo.Customer" />
 		<mapping class="com.me.priyav.pojo.BillingAddress" />
 		<mapping class="com.me.priyav.pojo.Product" />
+		<mapping class="com.me.priyav.pojo.Cart" />
+		<mapping class="com.me.priyav.pojo.CartItem" />
 	</session-factory>
 </hibernate-configuration>
