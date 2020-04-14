@@ -22,10 +22,12 @@
 	src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
 
 <!-- Bootstrap core CSS -->
-<link href="<c:url value="/resources/css/bootstrap.min.css" />" rel="stylesheet">
+<link href="<c:url value="/resources/css/bootstrap.min.css" />"
+	rel="stylesheet">
 
 <!-- My carousel CSS -->
-<link href="<c:url value="/resources/css/carousel.css" />" rel="stylesheet">
+<link href="<c:url value="/resources/css/carousel.css" />"
+	rel="stylesheet">
 
 <!-- Main CSS -->
 <link href="<c:url value="/resources/css/main.css" />" rel="stylesheet">
@@ -58,7 +60,10 @@
 					<div id="navbar" class="navbar-collapse collapse">
 						<ul class="nav navbar-nav">
 							<li><a href="<c:url value="/" />">Home</a></li>
-							<li><a href="<c:url value="/product/all" />">Products</a></li>
+							<c:if test="${sessionScope.userType != 'admin'}">
+								<li><a href="<c:url value="/product/all" />">Products</a></li>
+							</c:if>
+
 							<li><a href="<c:url value="/about.htm" />">About Us</a></li>
 						</ul>
 						<ul class="nav navbar-nav pull-right">

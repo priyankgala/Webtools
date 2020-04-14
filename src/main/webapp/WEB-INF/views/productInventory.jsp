@@ -16,13 +16,13 @@
 		<div class="page-header">
 			<h1>Product Inventory Page</h1>
 			<p class="lead">This is the product inventory page:</p>
-			<table class="table table-striped table-hover">
+			<table class="table">
 				<thead>
 					<tr class="bg-success">
-						<th>Photo Thumb</th>
+						<th>Photo</th>
 						<th>Product Name</th>
 						<th>Category</th>
-						<th>Condition</th>
+						<th>Description</th>
 						<th>Price</th>
 						<th></th>
 					</tr>
