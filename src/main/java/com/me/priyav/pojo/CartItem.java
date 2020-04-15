@@ -18,7 +18,9 @@ public class CartItem {
 	private Product product;
 
 	private int quantity;
+	
 	private double totalPrice;
+	
 	public int getCartItemId() {
 		return cartItemId;
 	}

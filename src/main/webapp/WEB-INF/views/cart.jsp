@@ -1,6 +1,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ include file="/WEB-INF/views/template/header.jsp"%>
 
+<!-- My -->
 <div class="container-wrapper">
 	<div class="container">
 		<section>
@@ -12,9 +13,9 @@
 			</div>
 		</section>
 
-		<section class="container" ng-app="cartApp">
+		<section class="container">
 
-			<div ng-controller="cartCtrl" ng-init="initCartId('${cartId}')">
+			<div>
 
 				<div>
 					<a class="btn btn-danger pull-left" ng-click="clearCart()"><span
@@ -24,32 +25,32 @@
 						class="glyphicon glyphicon-shopping-cart"></span> Check out</a>
 				</div>
 
-				<br />
-				<br />
-				<br />
+				<br /> <br /> <br />
 
 				<table class="table table-hover">
+					<thead>
+						<tr class="bg-success">
+							<th>Photo</th>
+							<th>Quantity</th>
+							<th>Price</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach items="${cart}" var="cart">
+							<tr>
+								<th><img
+									src="<spring:url value="/resources/images/${cart.product.productId}.png" />"
+									alt="image" style="width: 50%" /></th>
+								<th>${cart.quantity}</th>
+								<th>${cart.totalPrice}USD</th>
+							</tr>
+						</c:forEach>
+					</tbody>
 					<tr>
-						<th>Product</th>
-						<th>Unit Price</th>
-						<th>Quantity</th>
-						<th>Price</th>
-						<th>Action</th>
-					</tr>
-					<tr ng-repeat="item in cart.cartItems">
-						<td>{{item.product.productName}}</td>
-						<td>{{item.product.productPrice}}</td>
-						<td>{{item.quantity}}</td>
-						<td>{{item.totalPrice}}</td>
-						<td><a href="#" class="label label-danger"
-							ng-click="removeFromCart(item.product.productId)"><span
-								class="glyphicon glyphicon-remove"></span>remove</a></td>
-					</tr>
-					<tr>
-						<th></th>
 						<th></th>
 						<th>Grand Total</th>
-						<th>{{calGrandTotal()}}</th>
+						<th ><c:out value="${grandTotal}USD"></c:out></th>
 						<th></th>
 					</tr>
 				</table>
@@ -60,8 +61,5 @@
 		</section>
 	</div>
 </div>
-
-<!-- My -->
-<script src="<c:url value="/resources/js/controller.js?v3" /> "></script>
 
 <%@ include file="/WEB-INF/views/template/footer.jsp"%>

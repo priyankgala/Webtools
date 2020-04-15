@@ -21,4 +21,19 @@ public class CartDao extends Dao {
 		return result;
 	}
 
+	public int updateCartItem(CartItem cartItem) {
+		int result = 0;
+		try {
+			beginTransaction();
+			getSession().update(cartItem);
+			result = 1;
+			commit();
+		} catch (HibernateException e) {
+			rollbackTransaction();
+		} finally {
+			close();
+		}
+		return result;
+	}
+
 }
