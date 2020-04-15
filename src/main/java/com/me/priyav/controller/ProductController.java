@@ -56,13 +56,13 @@ public class ProductController {
 	 * See products by Category
 	 * 
 	 * */
-    @RequestMapping("/product/productListByCategory")
-    public String getProductByCategory(@RequestParam("searchCondition") String searchCondition, Model model){
-        List<Product> products = pDao.getProductByCategory();
-        model.addAttribute("products", products);
-        model.addAttribute("searchCondition", searchCondition);
-
-        return "productList";
-    }
+//    @RequestMapping("/product/productListByCategory")
+//    public String getProductByCategory(@RequestParam("searchCondition") String searchCondition, Model model){
+//        List<Product> products = pDao.getProductByCategory();
+//        model.addAttribute("products", products);
+//        model.addAttribute("searchCondition", searchCondition);
+//
+//        return "productList";
+//    }
 
 }

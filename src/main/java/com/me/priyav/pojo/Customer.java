@@ -26,9 +26,9 @@ public class Customer {
     @JoinColumn(name = "billingAddressId")
     private BillingAddress billingAddress;
 	
-//	@OneToOne
-//    @JoinColumn(name = "cartId")
-//    private ShoppingCart cart;
+	@OneToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "cartId")
+    private Cart cart;
 	
 	//getter and setters
 
@@ -88,13 +88,13 @@ public class Customer {
 		this.billingAddress = billingAddress;
 	}
 
-//	public ShoppingCart getCart() {
-//		return cart;
-//	}
-//
-//	public void setCart(ShoppingCart cart) {
-//		this.cart = cart;
-//	}
-//	
+	public Cart getCart() {
+		return cart;
+	}
+
+	public void setCart(Cart cart) {
+		this.cart = cart;
+	}
+	
 
 }

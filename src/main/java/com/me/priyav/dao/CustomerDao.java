@@ -1,5 +1,6 @@
 package com.me.priyav.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.me.priyav.pojo.*;
 import org.hibernate.HibernateException;
@@ -16,11 +17,13 @@ public class CustomerDao extends Dao {
 		} catch (HibernateException e) {
 			rollbackTransaction();
 
+		} finally {
+			close();
 		}
 		return customerList;
 
 	}
-	
+
 	public int addCustomer(Customer customer) {
 		int result = 0;
 		try {
@@ -31,9 +34,30 @@ public class CustomerDao extends Dao {
 
 		} catch (HibernateException e) {
 			rollbackTransaction();
+		}finally {
+			close();
 		}
 
 		return result;
+	}
+
+	public Customer getCustomer(String username) {
+
+		List<Customer> cList = new ArrayList<Customer>();
+		try {
+			beginTransaction();
+			Query q = getSession().createQuery("from Customer where custEmail=:user");
+			q.setString("user", username);
+			cList = q.list();
+			commit();
+		} catch (HibernateException e) {
+			e.printStackTrace();
+			rollbackTransaction();
+		} finally {
+			close();
+		}
+		return cList.get(0);
+
 	}
 
 }

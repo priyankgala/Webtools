@@ -29,6 +29,8 @@ public class UserLoginDao extends Dao {
 
 		} catch (HibernateException e) {
 			rollbackTransaction();
+		}finally {
+			close();
 		}
 
 		return result;

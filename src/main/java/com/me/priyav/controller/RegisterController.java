@@ -56,6 +56,10 @@ public class RegisterController {
 		address.setCity(city);
 		address.setState(state);
 		address.setZipCode(zipcode);
+		
+		Cart cart = new Cart();
+		cart.setGrandTotal(0);
+//		cart.setCustomer(customer);
 
 		// Customer obj set values
 		customer.setCustFName(fName);
@@ -64,6 +68,7 @@ public class RegisterController {
 		customer.setCustPhone(phone);
 		customer.setCustPassword(newPswd);
 		customer.setBillingAddress(address);
+		customer.setCart(cart);
 
 		CustomerDao custDao = new CustomerDao();
 		List<Customer> customerList = custDao.getAllCustomers();
@@ -79,7 +84,7 @@ public class RegisterController {
 		}
 
 		int res2 = custDao.addCustomer(customer);
-
+		
 		UserLoginDao login = new UserLoginDao();
 		String userType = "customer";
 //		logger.info("Encrypted password is: " + newPswd);
@@ -115,6 +120,7 @@ public class RegisterController {
 		List<Users> user = loginDao.authenticateUser(username, password);
 		if (user != null) {
 			session.setAttribute("userType", user.get(0).getUserType());
+			session.setAttribute("userName", user.get(0).getUsername());
 			return "home";
 		} else {
 			model.addAttribute("error", "Invalid username and password.");
@@ -125,6 +131,7 @@ public class RegisterController {
 	@RequestMapping("/logout.htm")
 	public String logout(HttpServletRequest request, Model model, HttpSession session) {
 		session.removeAttribute("userType");
+		session.removeAttribute("userName");
 		session.invalidate();
 		return "home";
 	}

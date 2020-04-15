@@ -1,5 +1,8 @@
 package com.me.priyav.dao;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -9,35 +12,51 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.Session;
 
 public class Dao {
+	private static final Logger log = Logger.getAnonymousLogger();
+    
 	private static final ThreadLocal sessionThread = new ThreadLocal();
-	static final SessionFactory sf = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
-	private Session session = null;
+    private static final SessionFactory sessionFactory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
 
-	public static Session getSession() {
+    protected Dao() {
+    }
 
-		Session session = (Session) Dao.sessionThread.get();
+    public static Session getSession()
+    {
+    	
+        Session session = (Session) Dao.sessionThread.get();
+        
+        if (session == null)
+        {
+            session = sessionFactory.openSession();
+            Dao.sessionThread.set(session);
+        }
+        return session;
+    }
 
-		if (session == null) {
-			session = sf.openSession();
-			Dao.sessionThread.set(session);
-		}
-		return session;
-	}
+    protected void beginTransaction() {
+        getSession().beginTransaction();
+    }
 
-	protected void beginTransaction() {
-		getSession().beginTransaction();
-	}
+    protected void commit() {
+        getSession().getTransaction().commit();
+    }
 
-	protected void commit() {
-		getSession().getTransaction().commit();
-	}
+    protected void rollbackTransaction() {
+        try {
+            getSession().getTransaction().rollback();
+        } catch (HibernateException e) {
+            log.log(Level.WARNING, "Cannot rollback", e);
+        }
+        try {
+            getSession().close();
+        } catch (HibernateException e) {
+            log.log(Level.WARNING, "Cannot close", e);
+        }
+        Dao.sessionThread.set(null);
+    }
 
-	protected void close() {
-		getSession().close();
-	}
-
-	protected void rollbackTransaction() {
-		getSession().getTransaction().rollback();
-	}
-
+    public static void close() {
+        getSession().close();
+        Dao.sessionThread.set(null);
+    }
 }

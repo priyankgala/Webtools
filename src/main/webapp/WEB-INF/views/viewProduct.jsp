@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ include file="/WEB-INF/views/template/header.jsp"%>
@@ -5,18 +6,28 @@
 
 <div class="container-wrapper">
 	<div class="container">
+		<p>
+			<c:out value="${requestScope.cartAdd}" />
+		</p>
+
 		<div class="page-header">
 			<h1>Product Detail</h1>
+			<c:if test="${sessionScope.userType == null}">
+				<p class="lead" style="color: #ff0000;">Please Register/ Login
+					to buy this product</p>
+			</c:if>
 
+			<c:if test="${sessionScope.userType != null}">
+				<p class="lead">Here is the detail information of the product:</p>
+			</c:if>
 
-			<p class="lead">Here is the detail information of the product:</p>
 		</div>
 
-		<div class="container" ng-app="cartApp">
+		<div class="container">
 			<div class="row">
 				<div class="col-md-5">
 					<img
-						src="<spring:url value="/resources/images/${product.productId}.png" />"
+						src="<c:url value="/resources/images/${product.productId}.png" />"
 						alt="image" style="width: 70%" />
 				</div>
 				<div class="col-md-5">
@@ -34,44 +45,38 @@
 
 					<br />
 
-					<%--                     <c:set var = "role" scope="page" value="${param.role}" /> --%>
-					<%--                     <c:set var = "url" scope="page" value="/product/productList" /> --%>
-					<%--                     <c:if test="${role='admin'}"> --%>
-					<%--                         <c:set var="url" scope="page" value="/admin/productInventory" /> --%>
-					<%--                     </c:if> --%>
-
 					<c:if test="${sessionScope.userType == 'admin'}">
 						<a href="<c:url value = "/admin/productInventory.htm" />"
 							class="btn btn-default">Back</a>
-						<a href="<spring:url value="/admin/product/updateProduct/${product.productId}" />" class="btn btn-warning btn-large"> <span
-							class="glyphicon glyphicon-remove"></span>Edit
+						<a
+							href="<spring:url value="/admin/product/updateProduct/${product.productId}" />"
+							class="btn btn-warning btn-large"> <span
+							class="glyphicon glyphicon-remove"></span>Update Product
 						</a>
 					</c:if>
 
 					<c:if test="${sessionScope.userType == 'customer'}">
 						<a href="<c:url value = "/product/all" />" class="btn btn-default">Back</a>
-						<a href="#" class="btn btn-warning btn-large"><span
+						<a
+							href="<spring:url value="/product/addCart/${product.productId}" />"
+							class="btn btn-warning btn-large"><span
 							class="glyphicon glyphicon-shopping-cart"></span> Order Now</a>
 						<a href="<spring:url value="/cart" />" class="btn btn-default"><span
-								class="glyphicon glyphicon-hand-right"></span> View Cart</a>
+							class="glyphicon glyphicon-hand-right"></span> View Cart</a>
 					</c:if>
 
-					<!-- 					<p ng-controller="cartCtrl"> -->
-					<%-- 						<a href="<c:url value = "/admin/productInventory.htm" />" --%>
-					<!-- 							class="btn btn-default">Back</a> <a href="#" -->
-					<!-- 							class="btn btn-warning btn-large" -->
-					<%-- 							ng-click="addToCart('${product.productId}')"><span --%>
-					<!-- 							class="glyphicon glyphicon-shopping-cart"></span> Order Now</a> <a -->
-					<%-- 							href="<spring:url value="/cart" />" class="btn btn-default"><span --%>
-					<!-- 							class="glyphicon glyphicon-hand-right"></span> View Cart</a> -->
-					<!-- 					</p> -->
+					<c:if test="${sessionScope.userType == null}">
+						<a href="<c:url value = "/product/all" />" class="btn btn-default">Back</a>
+					</c:if>
 
 				</div>
 			</div>
 		</div>
+	</div>
+</div>
 
 
-		<!-- My -->
-		<script src="<c:url value="/resources/js/controller.js?v3" /> "></script>
+<!-- My -->
+<script src="<c:url value="/resources/js/controller.js?v3" /> "></script>
 
-		<%@ include file="/WEB-INF/views/template/footer.jsp"%>
+<%@ include file="/WEB-INF/views/template/footer.jsp"%>

@@ -22,6 +22,8 @@ public class ProductDao extends Dao {
 			result = 1;
 		} catch (HibernateException e) {
 			rollbackTransaction();
+		}finally {
+			close();
 		}
 		return result;
 
@@ -120,9 +122,9 @@ public class ProductDao extends Dao {
 
 }
 
-	public List<Product> getProductByCategory() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	public List<Product> getProductByCategory() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 }
