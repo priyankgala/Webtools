@@ -1,8 +1,10 @@
 package com.me.priyav.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,9 +32,12 @@ public class CartController {
 	@Autowired
 	CartDao cDao;
 
-	@RequestMapping("/cart")
-	public String showCart(HttpServletRequest request, Model model) {
-
+	@RequestMapping("/customer/cart/cart.htm")
+	public String showCart(HttpServletRequest request, Model model, HttpServletResponse response) {
+		if (request.getAttribute("unsafe_check").equals("true")) {
+			request.setAttribute("unsafe_check", "false");
+			return "redirect: /priyav/login.htm";
+		}
 		logger.info("seeing the cart");
 		logger.info(" ");
 		logger.info(" ");
@@ -41,29 +46,29 @@ public class CartController {
 		logger.info(" ");
 		String username = (String) request.getSession().getAttribute("userName");
 		logger.info("Username is: " + username);
-
-//		CustomerDao cstDao = new CustomerDao();
-//		CartDao cDao = new CartDao();
 		double total = 0;
 		logger.info("Getting the customer object and then cart object from customer");
 		Customer cust = cstDao.getCustomer(username);
 		Cart cart = cust.getCart();
 		List<CartItem> cartItems = cart.getCartItems();
 		logger.info("Size of the customers cart is:" + cartItems.size());
-		
-		
-		for(int i=0;i<cartItems.size();i++) {
+
+		for (int i = 0; i < cartItems.size(); i++) {
 			total += cartItems.get(i).getTotalPrice();
 		}
-		
+
 		request.setAttribute("grandTotal", total);
 		model.addAttribute("cart", cartItems);
-		
+
 		return "cart";
 	}
 
-	@RequestMapping("/product/addCart/{id}")
+	@RequestMapping("/customer/product/addCart/{id}")
 	public String addProduct(@PathVariable int id, Model model, HttpServletRequest request) {
+		if (request.getAttribute("unsafe_check").equals("true")) {
+			request.setAttribute("unsafe_check", "false");
+			return "redirect: /priyav/login.htm";
+		}
 		logger.info("Redirecting to ViewProduct after adding the product in the cart");
 		logger.info(" ");
 		logger.info(" ");
@@ -80,6 +85,7 @@ public class CartController {
 //		CartDao cDao = new CartDao();
 		logger.info("Getting the customer object and then cart object from customer");
 		Customer cust = cstDao.getCustomer(username);
+		logger.info(""+cust);
 		Cart cart = cust.getCart();
 		List<CartItem> cartItems = cart.getCartItems();
 		logger.info("Size of the customers cart is:" + cartItems.size());
@@ -118,5 +124,75 @@ public class CartController {
 			request.setAttribute("cartAdd", "Cannot add item in Cart");
 		}
 		return "viewProduct";
+	}
+
+	/*
+	 * 
+	 * 
+	 * 
+	 * Remove from Cart
+	 * 
+	 * 
+	 */
+	@RequestMapping("/customer/removeFromCart/{id}")
+	public String removeFromCart(@PathVariable int id, Model model, HttpServletRequest request) {
+		if (request.getAttribute("unsafe_check").equals("true")) {
+			request.setAttribute("unsafe_check", "false");
+			return "redirect: /priyav/login.htm";
+		}
+		logger.info("Got the customers cart here");
+		String username = (String) request.getSession().getAttribute("userName");
+		logger.info("Username is: " + username);
+		double total = 0;
+		logger.info("Cart Item ID is:"+id);
+		logger.info("Getting the customer object and then cart object from customer");
+		Customer cust = cstDao.getCustomer(username);
+		Cart cart = cust.getCart();
+		List<CartItem> cartItems = cart.getCartItems();
+		int ciID = 0;
+		for (int i = 0; i < cartItems.size(); i++) {
+			logger.info("Cart Items are"+cartItems.get(i).getCartItemId());
+			if(id == cartItems.get(i).getCartItemId()) {
+				ciID= i;
+				break;
+			}
+		}
+		logger.info("ArrayList index is: "+ciID);
+		
+		cart.getCartItems().remove(ciID);
+		logger.info(" ");
+		logger.info(" ");
+		logger.info(" ");
+		logger.info(" ");
+		logger.info(" ");
+		logger.info("Removing from the cart");
+		int res = cDao.removeProdcutById(id);
+		if (res == 1) {
+			logger.info(" ");
+			logger.info(" ");
+			logger.info(" ");
+			logger.info(" ");
+			logger.info(" ");
+			logger.info("Deleted the item from cart");
+		}
+		
+		logger.info("redirecting to the cart now");
+		logger.info(" ");
+		logger.info(" ");
+		logger.info(" ");
+		logger.info(" ");
+		logger.info(" ");
+
+		logger.info("Size of the customers cart is:" + cartItems.size());
+
+		for (int i = 0; i < cartItems.size(); i++) {
+			total += cartItems.get(i).getTotalPrice();
+		}
+
+		request.setAttribute("grandTotal", total);
+		cart.setGrandTotal(total);
+		model.addAttribute("cart", cartItems);
+
+		return "cart";
 	}
 }

@@ -12,10 +12,6 @@
 
 <title>Priyav Umbrella Mart</title>
 
-<!-- Angular.JS -->
-<script
-	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.1/angular.min.js"></script>
-
 <!-- JQuery -->
 <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
 <script
@@ -60,7 +56,10 @@
 					<div id="navbar" class="navbar-collapse collapse">
 						<ul class="nav navbar-nav">
 							<li><a href="<c:url value="/" />">Home</a></li>
-							<c:if test="${sessionScope.userType != 'admin'}">
+							<c:if test="${sessionScope.userType == 'customer'}">
+								<li><a href="<c:url value="/customer/product/all" />">Products</a></li>
+							</c:if>
+							<c:if test="${sessionScope.userType == null}">
 								<li><a href="<c:url value="/product/all" />">Products</a></li>
 							</c:if>
 
@@ -68,22 +67,22 @@
 						</ul>
 						<ul class="nav navbar-nav pull-right">
 							<c:if test="${sessionScope.userType != null}">
-								<li><a>Welcome: ${sessionScope.userType}</a></li>
-								<li><a href="<c:url value="logout.htm" />">Logout</a></li>
+								<li><a>Welcome: ${sessionScope.userName}</a></li>
+								<li><a href="<c:url value="/logout.htm" />">Logout</a></li>
 
 								<c:if test="${sessionScope.userType != 'admin'}">
-									<li><a href="<c:url value="/customer/cart" />">Cart</a></li>
+									<li><a href="<c:url value="/customer/cart/cart.htm" />">Cart</a></li>
 								</c:if>
 
 								<c:if test="${sessionScope.userType == 'admin'}">
-									<li><a href="<c:url value="admin.htm" />">Admin</a></li>
+									<li><a href="<c:url value="/admin/admin.htm" />">Admin</a></li>
 								</c:if>
 
 							</c:if>
 
 							<c:if test="${sessionScope.userType == null}">
-								<li><a href="<c:url value="login.htm" />">Login</a></li>
-								<li><a href="<c:url value="register.htm" />">Register</a></li>
+								<li><a href="<c:url value="/login.htm" />">Login</a></li>
+								<li><a href="<c:url value="/register.htm" />">Register</a></li>
 							</c:if>
 						</ul>
 					</div>

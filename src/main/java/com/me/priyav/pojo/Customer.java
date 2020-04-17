@@ -1,10 +1,12 @@
 package com.me.priyav.pojo;
 
+import java.io.Serializable;
+
 import javax.persistence.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @Entity
-public class Customer {
+public class Customer implements Serializable	 {
 
 	public Customer() {
 

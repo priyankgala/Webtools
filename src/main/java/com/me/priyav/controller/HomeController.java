@@ -27,7 +27,8 @@ public class HomeController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Model model, HttpServletRequest request) {
 		logger.info("Welcome to my HomePage!");
-		
+		logger.info("********************Controller"+request.getRequestURI());
+		request.setAttribute("URI", request.getRequestURI());
 //		request.getSession().setMaxInactiveInterval(10);
 //		if(request.getSession().getLastAccessedTime() > 10) {
 //			logger.info("Max inactive time reached.. invalidating the session");

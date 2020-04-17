@@ -1,17 +1,27 @@
 <%@ include file="/WEB-INF/views/template/header.jsp"%>
 
-<div class="container-wrapper">
+<%
+	//This part is to check if user is authenticated even if the browsers back button or refresh is clicked
+response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+response.setHeader("Pragma", "no-cache");
+response.setHeader("Expires", "0");
+if (session.getAttribute("userType") == null) {
+	response.sendRedirect("/priyav/login.htm");
+} else {
+	System.out.println("User is authenticated");
+}
+%><div class="container-wrapper">
 	<div class="container">
 		<div class="page-header">
 			<h1>Administrator page</h1>
-			<p class="lead">This is the administrator page!</p>
+			<c:if test="${sessionScope.userType != null}">
+				<h2>
+					Welcome:
+					<c:out value="${sessionScope.userName}" />
+					| <a href="<c:url value="logout.htm"/>">Logout</a>
+				</h2>
+			</c:if>
 		</div>
-		<c:if test="${pageContext.request.userPrincipal.name != null}">
-			<h2>
-				Welcome: ${pageContext.request.userPrincipal.name} | <a
-					href="<c:url value="logout.htm"/>">Logout</a>
-			</h2>
-		</c:if>
 		<h3>
 			<a href="<c:url value="/admin/productInventory.htm" /> ">Product
 				Inventory</a>
@@ -19,7 +29,7 @@
 		<p>Here you can view, check and modify the product inventory!</p>
 		<br /> <br />
 		<h3>
-			<a href="<c:url value="/admin/customer" /> ">Customer Management</a>
+			<a href="<c:url value="/admin/customerList/all.htm" /> ">Customer Management</a>
 		</h3>
 		<p>Here you can view the customer information!</p>
 	</div>

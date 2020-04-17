@@ -3,9 +3,11 @@ package com.me.priyav.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
-import org.mindrot.jbcrypt.BCrypt;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Restrictions;
 
 import com.me.priyav.pojo.Product;
 
@@ -122,9 +124,45 @@ public class ProductDao extends Dao {
 
 }
 
-//	public List<Product> getProductByCategory() {
+//	public List<Product> getProductByCategory(String searchType) {
 //		// TODO Auto-generated method stub
-//		return null;
+//		List<Product> p = new ArrayList<Product>();
+//		try {
+//			beginTransaction();
+//			Query q = getSession().createQuery("from Product where productCategory =:type");
+//			q.setString("type", searchType);
+//			p = q.list();
+//			commit();
+//		} catch (HibernateException e) {
+//			e.printStackTrace();
+//			rollbackTransaction();
+//		} finally {
+//			close();
+//		}
+//
+//		return p;
 //	}
+	
+	public List<Product> getProductByCategory(String searchType) {
+		// TODO Auto-generated method stub
+		List<Product> p = new ArrayList<Product>();
+		try {
+			beginTransaction();
+			Criteria productList = getSession().createCriteria(Product.class);
+			Criterion type = Restrictions.like("productCategory",searchType);
+			
+			productList.add(type);
+			p = productList.list();
+			commit();
+		} catch (HibernateException e) {
+			e.printStackTrace();
+			rollbackTransaction();
+		} finally {
+			close();
+		}
+
+		return p;
+	}
+
 
 }

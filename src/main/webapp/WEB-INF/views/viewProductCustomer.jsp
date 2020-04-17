@@ -56,7 +56,7 @@
 					</c:if>
 
 					<c:if test="${sessionScope.userType == 'customer'}">
-						<a href="<c:url value = "/product/all" />" class="btn btn-default">Back</a>
+						<a href="<c:url value = "/customer/product/all" />" class="btn btn-default">Back</a>
 						<a
 							href="<spring:url value="/customer/product/addCart/${product.productId}" />"
 							class="btn btn-warning btn-large"><span
@@ -65,9 +65,9 @@
 							class="glyphicon glyphicon-hand-right"></span> View Cart</a>
 					</c:if>
 
-					<c:if test="${sessionScope.userType == null}">
-						<a href="<c:url value = "/product/all" />" class="btn btn-default">Back</a>
-					</c:if>
+<%-- 					<c:if test="${sessionScope.userType == null}"> --%>
+<%-- 						<a href="<c:url value = "/customer/product/all" />" class="btn btn-default">Back</a> --%>
+<%-- 					</c:if> --%>
 
 				</div>
 			</div>

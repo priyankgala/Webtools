@@ -32,7 +32,7 @@ public class Product {
 	@Transient
 	private MultipartFile productImage;
 	
-	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "product")
     private List<CartItem> cartItemList;
 
 	public int getProductId() {

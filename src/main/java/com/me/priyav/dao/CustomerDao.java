@@ -46,9 +46,12 @@ public class CustomerDao extends Dao {
 		List<Customer> cList = new ArrayList<Customer>();
 		try {
 			beginTransaction();
+			System.out.println("*****************************************"+username);
+			
 			Query q = getSession().createQuery("from Customer where custEmail=:user");
 			q.setString("user", username);
 			cList = q.list();
+			System.out.println("*****************************************"+cList);
 			commit();
 		} catch (HibernateException e) {
 			e.printStackTrace();

@@ -59,7 +59,7 @@ public class RegisterController {
 		
 		Cart cart = new Cart();
 		cart.setGrandTotal(0);
-//		cart.setCustomer(customer);
+		cart.setCustomer(customer);
 
 		// Customer obj set values
 		customer.setCustFName(fName);
@@ -133,6 +133,8 @@ public class RegisterController {
 		session.removeAttribute("userType");
 		session.removeAttribute("userName");
 		session.invalidate();
+		request.setAttribute("URI", request.getRequestURI());
+		logger.info(""+request.getRequestURI());
 		return "home";
 	}
 
