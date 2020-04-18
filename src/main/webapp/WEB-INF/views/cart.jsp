@@ -26,15 +26,18 @@ if (session.getAttribute("userType") == null) {
 		<section class="container">
 
 			<div>
-
 				<div>
-					<a class="btn btn-danger pull-left"><span
+					<a
+						href="<c:url value="/customer/clearOrder/${requestScope.custCartId}" />"
+						class="btn btn-danger pull-left"><span
 						class="glyphicon glyphicon-remove-sign"></span> Clear Cart</a>
-<%-- 					<c:if test="${cart.cart.cartId} == null }"> --%>
-						<a href="<c:url value="/customer/order/" />"
-							class="btn btn-success pull-right"><span
-							class="glyphicon glyphicon-shopping-cart"></span> Check out</a>
-<%-- 					</c:if> --%>
+
+
+					<%-- 					<c:if test="${cart.cart.cartId} == null }"> --%>
+					<a href="<c:url value="/customer/order/order.htm" />"
+						class="btn btn-success pull-right"><span
+						class="glyphicon glyphicon-shopping-cart"></span> Check out</a>
+					<%-- 					</c:if> --%>
 				</div>
 
 				<br /> <br /> <br />

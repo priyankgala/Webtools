@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 
+import com.me.priyav.pojo.Cart;
 import com.me.priyav.pojo.CartItem;
 import com.me.priyav.pojo.Product;
 
@@ -102,6 +103,42 @@ public class CartDao extends Dao {
 		}
 
 		return result;
+	}
+
+	public int removeProdcutByCartId(int id) {
+		// TODO Auto-generated method stub
+		int result = 0;
+		try {
+			beginTransaction();
+			Query q = getSession().createQuery("from CartItem where cartId =:pid");
+			q.setInteger("pid", id);
+			CartItem CI= (CartItem) q.uniqueResult();
+			if (CI != null) {
+				getSession().delete(CI);
+				commit();
+				result = 1;
+			}
+
+		} catch (HibernateException e) {
+			e.printStackTrace();
+			rollbackTransaction();
+		} finally {
+			close();
+		}
+
+		return result;
+	}
+
+	public void save(Cart cart) {
+		try {
+			beginTransaction();
+			getSession().update(cart);
+			commit();
+		} catch (HibernateException e) {
+			rollbackTransaction();
+		} finally {
+			close();
+		}
 	}
 
 }

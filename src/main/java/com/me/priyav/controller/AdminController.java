@@ -35,12 +35,13 @@ public class AdminController {
 
 	@Autowired
 	ProductDao pDao;
-	
+
 	@Autowired
 	CartDao cDao;
 
 	@Autowired
 	CustomerDao cstDao;
+
 	/*
 	 * 
 	 * 
@@ -48,16 +49,19 @@ public class AdminController {
 	 * 
 	 * 
 	 * 
-	 * */
+	 */
 	@RequestMapping("/admin/customerList/all.htm")
-    public String customerList(Model model){
+	public String customerList(HttpServletRequest request, Model model) {
+		if (request.getAttribute("unsafe_check").equals("true")) {
+			request.setAttribute("unsafe_check", "false");
+			return "redirect: /priyav/login.htm";
+		}
+		List<Customer> customerList = cstDao.getAllCustomers();
+		model.addAttribute("customerList", customerList);
 
-        List<Customer> customerList = cstDao.getAllCustomers();
-        model.addAttribute("customerList", customerList);
+		return "adminCustomerManagement";
+	}
 
-        return "adminCustomerManagement";
-    }
-	
 	/*
 	 * 
 	 * 
@@ -183,7 +187,7 @@ public class AdminController {
 	 * 
 	 */
 	@RequestMapping("/admin/product/viewProduct/{productId}")
-	public String viewProduct(HttpServletRequest request,@PathVariable int productId, Model model) throws IOException {
+	public String viewProduct(HttpServletRequest request, @PathVariable int productId, Model model) throws IOException {
 		if (request.getAttribute("unsafe_check").equals("true")) {
 			request.setAttribute("unsafe_check", "false");
 			return "redirect: /priyav/login.htm";
@@ -226,20 +230,20 @@ public class AdminController {
 				ex.printStackTrace();
 			}
 		}
-		
+
 		logger.info("Is product present in any cart Item");
 		List<CartItem> itemList = cDao.getCartListByProductid();
-		logger.info(""+itemList.size());
-		for(int i=0;i<itemList.size();i++) {
-			
-			logger.info(""+itemList.get(i).getCartItemId());
+		logger.info("" + itemList.size());
+		for (int i = 0; i < itemList.size(); i++) {
+
+			logger.info("" + itemList.get(i).getCartItemId());
 		}
-		
+
 		logger.info("Remove the product from cartItem");
-		int cartItemPresent= cDao.removeProdcutByProductId(id);
+		int cartItemPresent = cDao.removeProdcutByProductId(id);
 
 		int result = pDao.deleteProductById(id);
-		logger.info(""+result);
+		logger.info("" + result);
 		if (result == 1) {
 			return "redirect:/admin/productInventory.htm";
 		} else {
@@ -280,7 +284,7 @@ public class AdminController {
 			request.setAttribute("unsafe_check", "false");
 			return "redirect: /priyav/login.htm";
 		}
-		
+
 		if (result.hasErrors()) {
 			return "updateProduct";
 		}
@@ -300,7 +304,7 @@ public class AdminController {
 		}
 
 		int res = pDao.updateProduct(product);
-		
+
 		return "redirect: /priyav/admin/productInventory.htm";
 	}
 

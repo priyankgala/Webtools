@@ -26,7 +26,7 @@ public class Product {
 	@Min(value = 0, message = "The product price must not be less then zero")
 	private double productPrice;
 	
-	@Min(value = 0, message = "The product unit must not be less then zero")
+	@Min(value = 400, message = "The product unit must not be less then zero")
 	private int unitInStock;
 
 	@Transient

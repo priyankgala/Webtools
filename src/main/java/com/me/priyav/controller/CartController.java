@@ -58,6 +58,7 @@ public class CartController {
 		}
 
 		request.setAttribute("grandTotal", total);
+		request.setAttribute("custCatId",cart.getCartId());
 		model.addAttribute("cart", cartItems);
 
 		return "cart";
@@ -99,21 +100,24 @@ public class CartController {
 				logger.info("Cart items quantity is: " + cartItem.getQuantity());
 				cartItem.setTotalPrice(product.getProductPrice() * cartItem.getQuantity());
 				logger.info("Cart items new price is: " + cartItem.getTotalPrice());
+				cart.setGrandTotal(cartItem.getTotalPrice());
+				cDao.save(cart);
 				int res1 = cDao.updateCartItem(cartItem);
 				if (res1 == 1) {
 					model.addAttribute("product", product);
 					request.setAttribute("cartAdd", "Again Sucessfully added in Cart");
-					return "viewProduct";
+					return "viewProductCustomer";
 				}
 			}
 		}
-
 		logger.info("Item is not in the list");
 		CartItem cartItem = new CartItem();
 		cartItem.setProduct(product);
 		cartItem.setQuantity(1);
 		cartItem.setTotalPrice(product.getProductPrice() * cartItem.getQuantity());
 		cartItem.setCart(cart);
+		cart.setGrandTotal(product.getProductPrice() * cartItem.getQuantity());
+		cDao.save(cart);
 		int res2 = cDao.addCartItem(cartItem);
 
 		if (res2 == 1) {
@@ -123,7 +127,7 @@ public class CartController {
 			model.addAttribute("product", product);
 			request.setAttribute("cartAdd", "Cannot add item in Cart");
 		}
-		return "viewProduct";
+		return "viewProductCustomer";
 	}
 
 	/*
@@ -191,6 +195,7 @@ public class CartController {
 
 		request.setAttribute("grandTotal", total);
 		cart.setGrandTotal(total);
+		request.setAttribute("custCatId",cart.getCartId());
 		model.addAttribute("cart", cartItems);
 
 		return "cart";

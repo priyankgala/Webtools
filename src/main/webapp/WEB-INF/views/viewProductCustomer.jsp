@@ -61,13 +61,10 @@
 							href="<spring:url value="/customer/product/addCart/${product.productId}" />"
 							class="btn btn-warning btn-large"><span
 							class="glyphicon glyphicon-shopping-cart"></span> Order Now</a>
-						<a href="<spring:url value="/customer/cart.htm" />" class="btn btn-default"><span
+						<a href="<spring:url value="/customer/cart/cart.htm" />" class="btn btn-default"><span
 							class="glyphicon glyphicon-hand-right"></span> View Cart</a>
 					</c:if>
 
-<%-- 					<c:if test="${sessionScope.userType == null}"> --%>
-<%-- 						<a href="<c:url value = "/customer/product/all" />" class="btn btn-default">Back</a> --%>
-<%-- 					</c:if> --%>
 
 				</div>
 			</div>

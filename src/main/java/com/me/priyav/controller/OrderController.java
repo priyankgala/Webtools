@@ -1,23 +1,176 @@
 package com.me.priyav.controller;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.me.priyav.dao.CartDao;
+import com.me.priyav.dao.CustomerDao;
+import com.me.priyav.dao.OrderDao;
+import com.me.priyav.pojo.Cart;
+import com.me.priyav.pojo.CartItem;
+import com.me.priyav.pojo.Customer;
+import com.me.priyav.pojo.CustOrder;
+
 @Controller
 public class OrderController {
 	private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
-	
-	@RequestMapping("/customer/order/")
+	private Path path;
+
+	@Autowired
+	CustomerDao cstDao;
+
+	@Autowired
+	CartDao cDao;
+
+	@Autowired
+	OrderDao oDao;
+
+	@RequestMapping("/customer/order/order.htm")
 	public String confirmOrder(Model model, HttpServletRequest request) {
+		if (request.getAttribute("unsafe_check").equals("true")) {
+			request.setAttribute("unsafe_check", "false");
+			return "redirect: /priyav/login.htm";
+		}
 		logger.info("Inside Order Controller");
-		return "thankCustomer";
+		logger.info(" ");
+		logger.info(" ");
+		logger.info(" ");
+		logger.info(" ");
+		logger.info(" ");
+		String username = (String) request.getSession().getAttribute("userName");
+		logger.info("Username is: " + username);
+
+		logger.info("Getting the customer object and then cart object from customer");
+		Customer cust = cstDao.getCustomer(username);
+
+		cust.getCart();
+		CustOrder order = new CustOrder();
+		order.setCart(cust.getCart());
+		order.setCustomer(cust);
+		order.setBillingAddress(cust.getBillingAddress());
+		oDao.saveOrder(order);
+		request.setAttribute("grandTotal", order.getCart().getGrandTotal());
+		model.addAttribute("order", order);
+
+		return "orderConfirmation";
 	}
 
+	@RequestMapping("/customer/clearOrder/{id}")
+	public String clearOrder(@PathVariable int id, Model model, HttpServletRequest request) {
+		if (request.getAttribute("unsafe_check").equals("true")) {
+			request.setAttribute("unsafe_check", "false");
+			return "redirect: /priyav/login.htm";
+		}
+		logger.info("Got the customers cart here");
+		String username = (String) request.getSession().getAttribute("userName");
+		logger.info("Username is: " + username);
+		double total = 0;
+		logger.info("Getting the customer object and then cart object from customer");
+		Customer cust = cstDao.getCustomer(username);
+		Cart cart = cust.getCart();
+		logger.info("cart id is: " + id);
+		logger.info(" ");
+		logger.info(" ");
+		logger.info(" ");
+		logger.info(" ");
+		logger.info(" ");
+		logger.info("Removing from the cart");
+		List<CartItem> list = cart.getCartItems();
+		for (int i = 0; i < list.size(); i++) {
+			list.remove(i);
+		}
+		int res = cDao.removeProdcutByCartId(id);
+		if (res == 1) {
+			logger.info(" ");
+			logger.info(" ");
+			logger.info(" ");
+			logger.info(" ");
+			logger.info(" ");
+			logger.info("Deleted the item from cart");
+		}
+
+		logger.info("redirecting to the cart now");
+		logger.info(" ");
+		logger.info(" ");
+		logger.info(" ");
+		logger.info(" ");
+		logger.info(" ");
+
+		model.addAttribute("cart", list);
+
+		return "cart";
+	}
+
+	@RequestMapping("/customer/clearOrder/")
+	public String showCart(HttpServletRequest request, Model model, HttpServletResponse response) {
+		if (request.getAttribute("unsafe_check").equals("true")) {
+			request.setAttribute("unsafe_check", "false");
+			return "redirect: /priyav/login.htm";
+		}
+		logger.info("seeing the cart");
+		logger.info(" ");
+		logger.info(" ");
+		logger.info(" ");
+		logger.info(" ");
+		logger.info(" ");
+		String username = (String) request.getSession().getAttribute("userName");
+		logger.info("Username is: " + username);
+		double total = 0;
+		logger.info("Getting the customer object and then cart object from customer");
+		Customer cust = cstDao.getCustomer(username);
+		Cart cart = cust.getCart();
+		List<CartItem> cartItems = cart.getCartItems();
+		logger.info("Size of the customers cart is:" + cartItems.size());
+
+		for (int i = 0; i < cartItems.size(); i++) {
+			total += cartItems.get(i).getTotalPrice();
+		}
+
+		request.setAttribute("grandTotal", total);
+		request.setAttribute("custCatId", cart.getCartId());
+		model.addAttribute("cart", cartItems);
+
+		return "cart";
+	}
+
+	@RequestMapping("/customer/order/submitorder.htm")
+	public String submitOrder(Model model, HttpServletRequest request) {
+		if (request.getAttribute("unsafe_check").equals("true")) {
+			request.setAttribute("unsafe_check", "false");
+			return "redirect: /priyav/login.htm";
+		}
+		logger.info("Got the customers cart here");
+		String username = (String) request.getSession().getAttribute("userName");
+		logger.info("Username is: " + username);
+		double total = 0;
+		logger.info("Getting the customer object and then cart object from customer");
+		Customer cust = cstDao.getCustomer(username);
+		Cart cart = cust.getCart();
+		logger.info(" ");
+		logger.info(" ");
+		logger.info(" ");
+		logger.info(" ");
+		logger.info(" ");
+		logger.info("Removing from the cart");
+		List<CartItem> list = cart.getCartItems();
+		for (int i = 0; i < list.size(); i++) {
+			list.remove(i);
+		}
+		logger.info("Cart ID is order confirmation is:"+cart.getCartId());
+		int res = cDao.removeProdcutByCartId(cart.getCartId());
+		
+		return "thankCustomer";
+	}
 }
