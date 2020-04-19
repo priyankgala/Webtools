@@ -63,4 +63,25 @@ public class CustomerDao extends Dao {
 
 	}
 
+	public Customer getCustomerById(int id) {
+		// TODO Auto-generated method stub
+		List<Customer> cList = new ArrayList<Customer>();
+		try {
+			beginTransaction();
+//			System.out.println("*****************************************"+username);
+			
+			Query q = getSession().createQuery("from Customer where custId =:cid");
+			q.setInteger("cid", id);
+			cList = q.list();
+//			System.out.println("*****************************************"+cList);
+			commit();
+		} catch (HibernateException e) {
+			e.printStackTrace();
+			rollbackTransaction();
+		} finally {
+			close();
+		}
+		return cList.get(0);
+	}
+
 }

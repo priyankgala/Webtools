@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.me.priyav.PdfView.CustomerOrderDetails;
 import com.me.priyav.dao.CartDao;
 import com.me.priyav.dao.CustomerDao;
 import com.me.priyav.dao.ProductDao;
+import com.me.priyav.pojo.Cart;
 import com.me.priyav.pojo.CartItem;
 import com.me.priyav.pojo.Customer;
 import com.me.priyav.pojo.Product;
@@ -27,6 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import org.springframework.web.servlet.View;
 
 @Controller
 public class AdminController {
@@ -306,6 +309,24 @@ public class AdminController {
 		int res = pDao.updateProduct(product);
 
 		return "redirect: /priyav/admin/productInventory.htm";
+	}
+	
+	/*
+	 * 
+	 * 
+	 * View Customers order history
+	 * 
+	 * 
+	 * */
+	
+	///admin/customerList/viewOrder/
+	@RequestMapping("/admin/customerList/viewOrder/{id}")
+	public View viewCustomerOrders(@PathVariable int id, Model model, HttpServletRequest request) {
+	
+		Customer customer = cstDao.getCustomerById(id);
+		View view = new CustomerOrderDetails(customer);
+		return view;
+		
 	}
 
 }

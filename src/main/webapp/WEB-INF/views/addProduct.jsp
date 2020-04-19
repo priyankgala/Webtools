@@ -48,13 +48,13 @@
 			<div class="form-group">
 				<label for="price">Price</label>
 				<form:errors path="productPrice" cssStyle="color:#ff0000;" />
-				<form:input path="productPrice" id="price" class="form-control" />
+				<form:input path="productPrice" id="price" class="form-control"/>
 			</div>
 
 			<div class="form-group">
 				<label for="unitInStock">Unit In Stock</label>
 				<form:errors path="unitInStock" cssStyle="color:#ff0000;" />
-				<form:input path="unitInStock" id="unitInStock" class="form-control" />
+				<form:input path="unitInStock" id="unitInStock" class="form-control"/>
 			</div>
 
 			<div class="form-group">

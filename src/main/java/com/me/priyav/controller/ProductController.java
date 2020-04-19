@@ -93,9 +93,13 @@ public class ProductController {
 	 * See products by Category
 	 * 
 	 * */
-    @RequestMapping("/product/productListByCategory")
-    public String getProductByCategory(@RequestParam("searchCondition") String searchType, Model model){
-        List<Product> products = pDao.getProductByCategory(searchType);
+    @RequestMapping("/customer/product/productListByCategory")
+    public String getProductByCategory(@RequestParam("searchCondition") String searchType, Model model, HttpServletRequest request){
+    	if (request.getAttribute("unsafe_check").equals("true")) {
+			request.setAttribute("unsafe_check", "false");
+			return "redirect: /priyav/login.htm";
+		}
+    	List<Product> products = pDao.getProductByCategory(searchType);
         model.addAttribute("products", products);
         model.addAttribute("searchCondition", searchType);
 

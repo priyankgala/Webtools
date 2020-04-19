@@ -22,9 +22,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.me.priyav.dao.CartDao;
 import com.me.priyav.dao.CustomerDao;
 import com.me.priyav.dao.OrderDao;
+import com.me.priyav.dao.ProductDao;
 import com.me.priyav.pojo.Cart;
 import com.me.priyav.pojo.CartItem;
 import com.me.priyav.pojo.Customer;
+import com.me.priyav.pojo.Product;
 import com.me.priyav.pojo.CustOrder;
 
 @Controller
@@ -32,6 +34,9 @@ public class OrderController {
 	private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
 	private Path path;
 
+	@Autowired
+	ProductDao pDao;
+	
 	@Autowired
 	CustomerDao cstDao;
 
@@ -70,7 +75,7 @@ public class OrderController {
 
 		return "orderConfirmation";
 	}
-	
+
 	/**
 	 * 
 	 * 
@@ -81,7 +86,7 @@ public class OrderController {
 	 * 
 	 * 
 	 * 
-	 * */
+	 */
 
 	@RequestMapping("/customer/clearOrder/{id}")
 	public String clearOrder(@PathVariable int id, Model model, HttpServletRequest request) {
@@ -109,7 +114,7 @@ public class OrderController {
 		}
 		cart.setGrandTotal(0);
 		cDao.save(cart);
-		
+
 		int res = cDao.removeProdcutByCartId(id);
 		if (res == 1) {
 			logger.info(" ");
@@ -119,7 +124,7 @@ public class OrderController {
 			logger.info(" ");
 			logger.info("Deleted the item from cart");
 		}
-		
+
 		logger.info("redirecting to the cart now");
 		logger.info(" ");
 		logger.info(" ");
@@ -131,7 +136,7 @@ public class OrderController {
 
 		return "cart";
 	}
-	
+
 	@RequestMapping("/customer/clearOrder/")
 	public String showCart(HttpServletRequest request, Model model, HttpServletResponse response) {
 		if (request.getAttribute("unsafe_check").equals("true")) {
@@ -178,7 +183,8 @@ public class OrderController {
 		logger.info("Getting the customer object and then cart object from customer");
 		Customer cust = cstDao.getCustomer(username);
 		Cart cart = cust.getCart();
-		if(cart.getGrandTotal() == 0) {
+		if (cart.getGrandTotal() == 0) {
+			request.setAttribute("custCartId",cart.getCartId());
 			request.setAttribute("cartEmpty", "You don't have anything in your cart..!!!");
 			return "cart";
 		}
@@ -189,24 +195,57 @@ public class OrderController {
 		logger.info(" ");
 		logger.info("Removing from the cart");
 		List<CartItem> list = cart.getCartItems();
+		List<CartItem> emaillist = cart.getCartItems();
+		for (int i = 0; i < emaillist.size(); i++) {
+			logger.info("Product unit in cost is:" + emaillist.get(i).getProduct().getUnitInStock());
+			if (cart.getCartItems().get(i).getQuantity() <= emaillist.get(i).getProduct().getUnitInStock()) {
+				logger.info("Product size is less or equal to the Units available. ");
+				Product prd = emaillist.get(i).getProduct();
+				int stock = prd.getUnitInStock();
+				prd.setUnitInStock(stock-1);
+				pDao.updateProduct(prd);
+				logger.info("****************************Update stock is:"+prd.getUnitInStock());
+			} else {
+				
+					/*
+					 * 
+					 * 
+					 * going back to cart with product list 
+					 * 
+					 * */
+				logger.info("*********************Inside the else loop");
+				for (int j = 0; j < emaillist.size(); j++) {
+					total += emaillist.get(i).getTotalPrice();
+				}
+
+				request.setAttribute("grandTotal", total);
+				request.setAttribute("custCartId", cart.getCartId());
+				request.setAttribute("cartEmpty", "Product is out of Stock. Please try buying in few days !! Thank you..");
+				model.addAttribute("cart", emaillist);
+				
+				return "cart";
+			}
+		}
 		for (int i = 0; i < list.size(); i++) {
 			list.remove(i);
 		}
-		logger.info("Cart ID is order confirmation is:"+cart.getCartId());
+		cart.setGrandTotal(0);
+		cDao.save(cart);
+		logger.info("Cart ID is order confirmation is:" + cart.getCartId());
 		int res = cDao.removeProdcutByCartId(cart.getCartId());
-		//Sending Email
+		// Sending Email
 		try {
 			logger.info("data successfully stored in tables: Customer, User, BillingAddress");
 			logger.info("sending confirmation email");
-			SendEmail(username, username);
+			SendEmail(username, emaillist);
 		} catch (EmailException e) {
 			e.printStackTrace();
 		}
-		
+
 		return "thankCustomer";
 	}
-	
-	public void SendEmail(String emailID, String username) throws EmailException {
+
+	public void SendEmail(String emailID, List<CartItem> list) throws EmailException {
 		try {
 			Email email = new SimpleEmail();
 			email.setHostName("smtp.gmail.com");

@@ -78,11 +78,11 @@ if (session.getAttribute("userType") == null) {
 <div class="container marketing">
 
 	<!-- Three columns of text below the carousel -->
-	<c:if test="${sessionScope.userType} != admin }">
+	<c:if test="${sessionScope.userType == 'customer'}">
 		<div class="row">
 			<div class="col-lg-4">
 				<a class="btn btn-default"
-					href="<c:url value="/product/productListByCategory?searchCondition=MENS" />"
+					href="<c:url value="/customer/product/productListByCategory?searchCondition=MENS" />"
 					role="button"> <img class="img-circle"
 					src="<c:url value="/resources/images/back11.jpg"/>"
 					alt="Instrument Image" width="140" height="140">
@@ -98,7 +98,7 @@ if (session.getAttribute("userType") == null) {
 
 			<div class="col-lg-4">
 				<a class="btn btn-default"
-					href="<c:url value="/product/productListByCategory?searchCondition=LADIES" />"
+					href="<c:url value="/customer/product/productListByCategory?searchCondition=LADIES" />"
 					role="button"> <img class="img-circle"
 					src="<c:url value="/resources/images/back12.jpg"/>"
 					alt="Instrument Image" width="140" height="140">
@@ -114,7 +114,7 @@ if (session.getAttribute("userType") == null) {
 
 			<div class="col-lg-4">
 				<a class="btn btn-default"
-					href="<c:url value="/product/productListByCategory?searchCondition=KIDS" />"
+					href="<c:url value="/customer/product/productListByCategory?searchCondition=KIDS" />"
 					role="button"> <img class="img-circle"
 					src="<c:url value="/resources/images/back13.jpg"/>"
 					alt="Instrument Image" width="140" height="140">

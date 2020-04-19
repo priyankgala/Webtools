@@ -164,5 +164,10 @@ public class ProductDao extends Dao {
 		return p;
 	}
 
+//	public void updateUnits(Product prd) {
+//		
+//		
+//	}
+
 
 }

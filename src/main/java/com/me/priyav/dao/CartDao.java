@@ -72,6 +72,7 @@ public class CartDao extends Dao {
 			beginTransaction();
 			Query q = getSession().createQuery("from CartItem");
 			cList = q.list();
+			System.out.println(cList);
 			commit();
 		} catch (HibernateException e) {
 			e.printStackTrace();
@@ -88,12 +89,24 @@ public class CartDao extends Dao {
 			beginTransaction();
 			Query q = getSession().createQuery("from CartItem where productId =:pid");
 			q.setInteger("pid", id);
-			CartItem CI= (CartItem) q.uniqueResult();
-			if (CI != null) {
-				getSession().delete(CI);
+//			
+			List<CartItem> list = q.list();
+			for(CartItem c: list) {
+				getSession().delete(c);
 				commit();
-				result = 1;
+				int cost = (int)c.getTotalPrice();
+				System.out.println("*******************************"+cost);
+				if(cost == 0) {
+					c.getCart().setGrandTotal(0);
+					System.out.println("*******************************"+c.getCart().getGrandTotal());
+				}else {
+					c.getCart().setGrandTotal(cost);
+					System.out.println("*******************************"+c.getCart().getGrandTotal());
+				}
+				getSession().update(c.getCart());
 			}
+			commit();
+			result =1;
 
 		} catch (HibernateException e) {
 			e.printStackTrace();
