@@ -12,12 +12,14 @@ if (session.getAttribute("userType") == null) {
 }
 %>
 <!-- My -->
+<c:set var="cartId" value="${requestScope.custCartId}"></c:set>
 <div class="container-wrapper">
 	<div class="container">
 		<section>
 			<div class="jumbotron">
 				<div class="container">
 					<h1>Cart</h1>
+					<p><c:out value="${cartEmpty}"></c:out></p>
 					<p>All the selected products in your shopping cart</p>
 				</div>
 			</div>
@@ -27,8 +29,7 @@ if (session.getAttribute("userType") == null) {
 
 			<div>
 				<div>
-					<a
-						href="<c:url value="/customer/clearOrder/${requestScope.custCartId}" />"
+					<a href="<c:url value="/customer/clearOrder/${cartId}" />"
 						class="btn btn-danger pull-left"><span
 						class="glyphicon glyphicon-remove-sign"></span> Clear Cart</a>
 

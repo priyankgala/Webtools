@@ -58,11 +58,23 @@ public class CartController {
 		}
 
 		request.setAttribute("grandTotal", total);
-		request.setAttribute("custCatId",cart.getCartId());
+		request.setAttribute("custCartId",cart.getCartId());
 		model.addAttribute("cart", cartItems);
 
 		return "cart";
 	}
+	
+	/*
+	 * 
+	 * 
+	 * 
+	 * 
+	 * Adding products in Cart by customer
+	 * 
+	 * 
+	 * 
+	 * 
+	 * */
 
 	@RequestMapping("/customer/product/addCart/{id}")
 	public String addProduct(@PathVariable int id, Model model, HttpServletRequest request) {
@@ -106,6 +118,7 @@ public class CartController {
 				if (res1 == 1) {
 					model.addAttribute("product", product);
 					request.setAttribute("cartAdd", "Again Sucessfully added in Cart");
+					request.setAttribute("custCartId",cart.getCartId());
 					return "viewProductCustomer";
 				}
 			}
@@ -116,15 +129,17 @@ public class CartController {
 		cartItem.setQuantity(1);
 		cartItem.setTotalPrice(product.getProductPrice() * cartItem.getQuantity());
 		cartItem.setCart(cart);
-		cart.setGrandTotal(product.getProductPrice() * cartItem.getQuantity());
+		cart.setGrandTotal(cart.getGrandTotal()+ (product.getProductPrice() * cartItem.getQuantity()));
 		cDao.save(cart);
 		int res2 = cDao.addCartItem(cartItem);
 
 		if (res2 == 1) {
 			model.addAttribute("product", product);
+			request.setAttribute("custCartId",cart.getCartId());
 			request.setAttribute("cartAdd", "Sucessfully added in Cart");
 		} else {
 			model.addAttribute("product", product);
+			request.setAttribute("custCartId",cart.getCartId());
 			request.setAttribute("cartAdd", "Cannot add item in Cart");
 		}
 		return "viewProductCustomer";
@@ -135,6 +150,8 @@ public class CartController {
 	 * 
 	 * 
 	 * Remove from Cart
+	 * 
+	 * 
 	 * 
 	 * 
 	 */
@@ -195,7 +212,9 @@ public class CartController {
 
 		request.setAttribute("grandTotal", total);
 		cart.setGrandTotal(total);
+		cDao.save(cart);
 		request.setAttribute("custCatId",cart.getCartId());
+		request.setAttribute("custCartId",cart.getCartId());
 		model.addAttribute("cart", cartItems);
 
 		return "cart";

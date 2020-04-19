@@ -13,10 +13,6 @@
 
 <title>Priyav Umbrella Mart</title>
 
-<!-- Angular.JS -->
-<script
-	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.1/angular.min.js"></script>
-
 <!-- JQuery -->
 <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
 <script
@@ -176,7 +172,6 @@
 /* 	float: left; */
 /* 	width: 150px; */
 /* } */
-
 #requiredFname, #requiredLname, #emailcorrection, #phonecorrection,
 	#passwordCheck, #requiredStreet, #requiredAptNo, #requiredCity,
 	#requiredState, #requiredZip {
@@ -187,6 +182,23 @@
 <!-- NAVBAR
 ================================================== -->
 <body>
+	<%
+		//This part is to check if user is authenticated even if the browsers back button or refresh is clicked
+	response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+	response.setHeader("Pragma", "no-cache");
+	response.setHeader("Expires", "0");
+	if (session.getAttribute("userType") == null) {
+		if (request.getAttribute("URI").equals("/priyav/register.htm") ) {
+			System.out.println("Inside this if loop");
+			response.reset();
+		} else {
+			System.out.println("Inside this else loop");
+			response.sendRedirect("login.htm");
+		}
+	} else {
+		System.out.println("User is authenticated");
+	}
+	%>
 	<div class="navbar-wrapper">
 		<div class="container">
 			<nav class="navbar navbar-inverse navbar-static-top">
@@ -246,8 +258,9 @@
 
 				<!-- First name -->
 				<div class="form-group">
-					<label for="name">FirstName</label> 
-					<input type="text" class="form-control" name="firstName" id="firstName" placeholder="First Name" required/> <span id="requiredFname"></span>
+					<label for="name">FirstName</label> <input type="text"
+						class="form-control" name="firstName" id="firstName"
+						placeholder="First Name" required /> <span id="requiredFname"></span>
 				</div>
 
 				<!-- Last name -->

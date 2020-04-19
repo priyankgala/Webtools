@@ -21,8 +21,9 @@ public class RegisterController {
 	private static final Logger logger = LoggerFactory.getLogger(RegisterController.class);
 
 	@RequestMapping("/register.htm")
-	public String register(Model model) {
+	public String register(Model model, HttpServletRequest request) {
 		logger.info("redirect to Register Page");
+		request.setAttribute("URI", request.getRequestURI());
 		return "registerPage";
 	}
 
@@ -79,7 +80,6 @@ public class RegisterController {
 					model.addAttribute("emailMsg", "Email already exists");
 					return "registerPage";
 				}
-
 			}
 		}
 
@@ -106,8 +106,9 @@ public class RegisterController {
 
 	// Login controller
 	@RequestMapping("/login.htm")
-	public String login(Model model) {
+	public String login(Model model, HttpServletRequest request) {
 		logger.info("redirect to login Page");
+		request.setAttribute("URI", request.getRequestURI());
 		return "login";
 	}
 

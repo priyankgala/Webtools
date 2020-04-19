@@ -7,6 +7,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.mail.DefaultAuthenticator;
+import org.apache.commons.mail.Email;
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.SimpleEmail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +70,18 @@ public class OrderController {
 
 		return "orderConfirmation";
 	}
+	
+	/**
+	 * 
+	 * 
+	 * 
+	 * 
+	 * Clear cart
+	 * 
+	 * 
+	 * 
+	 * 
+	 * */
 
 	@RequestMapping("/customer/clearOrder/{id}")
 	public String clearOrder(@PathVariable int id, Model model, HttpServletRequest request) {
@@ -91,6 +107,9 @@ public class OrderController {
 		for (int i = 0; i < list.size(); i++) {
 			list.remove(i);
 		}
+		cart.setGrandTotal(0);
+		cDao.save(cart);
+		
 		int res = cDao.removeProdcutByCartId(id);
 		if (res == 1) {
 			logger.info(" ");
@@ -100,7 +119,7 @@ public class OrderController {
 			logger.info(" ");
 			logger.info("Deleted the item from cart");
 		}
-
+		
 		logger.info("redirecting to the cart now");
 		logger.info(" ");
 		logger.info(" ");
@@ -112,7 +131,7 @@ public class OrderController {
 
 		return "cart";
 	}
-
+	
 	@RequestMapping("/customer/clearOrder/")
 	public String showCart(HttpServletRequest request, Model model, HttpServletResponse response) {
 		if (request.getAttribute("unsafe_check").equals("true")) {
@@ -140,6 +159,7 @@ public class OrderController {
 
 		request.setAttribute("grandTotal", total);
 		request.setAttribute("custCatId", cart.getCartId());
+		request.setAttribute("cartEmpty", "Cart already empty");
 		model.addAttribute("cart", cartItems);
 
 		return "cart";
@@ -158,6 +178,10 @@ public class OrderController {
 		logger.info("Getting the customer object and then cart object from customer");
 		Customer cust = cstDao.getCustomer(username);
 		Cart cart = cust.getCart();
+		if(cart.getGrandTotal() == 0) {
+			request.setAttribute("cartEmpty", "You don't have anything in your cart..!!!");
+			return "cart";
+		}
 		logger.info(" ");
 		logger.info(" ");
 		logger.info(" ");
@@ -170,7 +194,33 @@ public class OrderController {
 		}
 		logger.info("Cart ID is order confirmation is:"+cart.getCartId());
 		int res = cDao.removeProdcutByCartId(cart.getCartId());
+		//Sending Email
+		try {
+			logger.info("data successfully stored in tables: Customer, User, BillingAddress");
+			logger.info("sending confirmation email");
+			SendEmail(username, username);
+		} catch (EmailException e) {
+			e.printStackTrace();
+		}
 		
 		return "thankCustomer";
+	}
+	
+	public void SendEmail(String emailID, String username) throws EmailException {
+		try {
+			Email email = new SimpleEmail();
+			email.setHostName("smtp.gmail.com");
+			email.setSmtpPort(465);
+			email.setAuthenticator(new DefaultAuthenticator("webtoolsproject2020@gmail.com", "1q_2w_3e_4r"));
+			email.setSSLOnConnect(true);
+			email.setFrom("no-reply@msis.neu.edu");
+			email.setSubject("Your Order has been successfully placed");
+			email.setMsg("Thank you for shopping with us");
+			email.addTo(emailID);
+			email.send();
+		} catch (Exception ex) {
+			logger.info("Unable to send email");
+			System.out.println(ex);
+		}
 	}
 }

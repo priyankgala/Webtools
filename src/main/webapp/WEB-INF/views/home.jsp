@@ -2,20 +2,20 @@
 <%@ include file="/WEB-INF/views/template/header.jsp"%>
 
 <%
-//This part is to check if user is authenticated even if the browsers back button or refresh is clicked
-	response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-	response.setHeader("Pragma", "no-cache");
-	response.setHeader("Expires", "0");
-	if (session.getAttribute("userType") == null) {
-		if (request.getAttribute("URI").equals("/priyav/") || request.getAttribute("URI").equals("/priyav/logout.htm")) {
-			System.out.println("Inside this if loop");
-		} else {
-			System.out.println("Inside this else loop");
-			response.sendRedirect("login.htm");
-		}
-	}else{
-		System.out.println("User is authenticated");
+	//This part is to check if user is authenticated even if the browsers back button or refresh is clicked
+response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+response.setHeader("Pragma", "no-cache");
+response.setHeader("Expires", "0");
+if (session.getAttribute("userType") == null) {
+	if (request.getAttribute("URI").equals("/priyav/") || request.getAttribute("URI").equals("/priyav/logout.htm")) {
+		System.out.println("Inside this if loop");
+	} else {
+		System.out.println("Inside this else loop");
+		response.sendRedirect("login.htm");
 	}
+} else {
+	System.out.println("User is authenticated");
+}
 %>
 <!-- Carousel
         ================================================== -->
@@ -78,49 +78,53 @@
 <div class="container marketing">
 
 	<!-- Three columns of text below the carousel -->
-	<div class="row">
-		<div class="col-lg-4">
-			<a class="btn btn-default"
-				href="<c:url value="/product/productListByCategory?searchCondition=MENS" />"
-				role="button"> <img class="img-circle"
-				src="<c:url value="/resources/images/back11.jpg"/>"
-				alt="Instrument Image" width="140" height="140">
-			</a>
+	<c:if test="${sessionScope.userType} != admin }">
+		<div class="row">
+			<div class="col-lg-4">
+				<a class="btn btn-default"
+					href="<c:url value="/product/productListByCategory?searchCondition=MENS" />"
+					role="button"> <img class="img-circle"
+					src="<c:url value="/resources/images/back11.jpg"/>"
+					alt="Instrument Image" width="140" height="140">
+				</a>
 
-			<h2>MENS:</h2>
-			<p>Looking for mens umbrellas? Buy a stylish gents umbrella made with the very latest in umbrella technology! Take a look today!</p>
+				<h2>MENS:</h2>
+				<p>Looking for mens umbrellas? Buy a stylish gents umbrella made
+					with the very latest in umbrella technology! Take a look today!</p>
 
+			</div>
+
+
+
+			<div class="col-lg-4">
+				<a class="btn btn-default"
+					href="<c:url value="/product/productListByCategory?searchCondition=LADIES" />"
+					role="button"> <img class="img-circle"
+					src="<c:url value="/resources/images/back12.jpg"/>"
+					alt="Instrument Image" width="140" height="140">
+				</a>
+
+				<h2>Ladies:</h2>
+				<p>From compact folding to ladies long walking style and
+					everything in between. Dip into one of our 10 different ladies
+					umbrella sub-categories</p>
+
+			</div>
+
+
+			<div class="col-lg-4">
+				<a class="btn btn-default"
+					href="<c:url value="/product/productListByCategory?searchCondition=KIDS" />"
+					role="button"> <img class="img-circle"
+					src="<c:url value="/resources/images/back13.jpg"/>"
+					alt="Instrument Image" width="140" height="140">
+				</a>
+
+				<h2>KIDS:</h2>
+				<p>Unique Designs, Durable Quality. Give a Twist to Your Child's
+					Style!</p>
+
+			</div>
 		</div>
-
-
-
-		<div class="col-lg-4">
-			<a class="btn btn-default"
-				href="<c:url value="/product/productListByCategory?searchCondition=LADIES" />"
-				role="button"> <img class="img-circle"
-				src="<c:url value="/resources/images/back12.jpg"/>"
-				alt="Instrument Image" width="140" height="140">
-			</a>
-
-			<h2>Ladies:</h2>
-			<p>From compact folding to ladies long walking style and everything in between. Dip into one of our 10 different ladies umbrella sub-categories </p>
-
-		</div>
-
-
-		<div class="col-lg-4">
-			<a class="btn btn-default"
-				href="<c:url value="/product/productListByCategory?searchCondition=KIDS" />"
-				role="button"> <img class="img-circle"
-				src="<c:url value="/resources/images/back13.jpg"/>"
-				alt="Instrument Image" width="140" height="140">
-			</a>
-
-			<h2>KIDS:</h2>
-			<p>Unique Designs, Durable Quality. Give a Twist to Your Child's Style!</p>
-
-		</div>
-	</div>
-
-
+	</c:if>
 	<%@ include file="/WEB-INF/views/template/footer.jsp"%>
