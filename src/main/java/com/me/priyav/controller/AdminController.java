@@ -307,6 +307,8 @@ public class AdminController {
 		}
 
 		int res = pDao.updateProduct(product);
+		int cartItemProductUpdate = cDao.updateProdcutByProductId(product, product.getProductId());
+		
 
 		return "redirect: /priyav/admin/productInventory.htm";
 	}

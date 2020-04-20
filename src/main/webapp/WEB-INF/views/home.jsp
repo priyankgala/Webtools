@@ -43,9 +43,8 @@ if (session.getAttribute("userType") == null) {
 				src="<c:url value="/resources/images/c8.jpg" />" alt="Second slide">
 			<div class="container">
 				<div class="carousel-caption">
-					<h1>Facts You Should know About Music</h1>
-					<p>Music brings jey, to all of our hearts. It's one of those,
-						emotional arts.</p>
+					<h1>Find your perfect Umbrella</h1>
+					<p>Umbrella for your taste and fashion.</p>
 				</div>
 			</div>
 		</div>
@@ -54,8 +53,8 @@ if (session.getAttribute("userType") == null) {
 				src="<c:url value="/resources/images/c10.jpg" />" alt="Third slide">
 			<div class="container">
 				<div class="carousel-caption">
-					<h1>It's A Jazz Affair</h1>
-					<p>Through ups and downs, Somehow I manage to survive in life.</p>
+					<h1>Say it with flowers</h1>
+					<p>Browse our floral Umbrella's</p>
 				</div>
 			</div>
 		</div>
@@ -85,23 +84,19 @@ if (session.getAttribute("userType") == null) {
 					href="<c:url value="/customer/product/productListByCategory?searchCondition=MENS" />"
 					role="button"> <img class="img-circle"
 					src="<c:url value="/resources/images/back11.jpg"/>"
-					alt="Instrument Image" width="140" height="140">
+					alt="Mens Umbrella" width="140" height="140">
 				</a>
 
 				<h2>MENS:</h2>
 				<p>Looking for mens umbrellas? Buy a stylish gents umbrella made
 					with the very latest in umbrella technology! Take a look today!</p>
-
 			</div>
-
-
-
 			<div class="col-lg-4">
 				<a class="btn btn-default"
 					href="<c:url value="/customer/product/productListByCategory?searchCondition=LADIES" />"
 					role="button"> <img class="img-circle"
 					src="<c:url value="/resources/images/back12.jpg"/>"
-					alt="Instrument Image" width="140" height="140">
+					alt="Ladies umbrella" width="140" height="140">
 				</a>
 
 				<h2>Ladies:</h2>
@@ -117,7 +112,7 @@ if (session.getAttribute("userType") == null) {
 					href="<c:url value="/customer/product/productListByCategory?searchCondition=KIDS" />"
 					role="button"> <img class="img-circle"
 					src="<c:url value="/resources/images/back13.jpg"/>"
-					alt="Instrument Image" width="140" height="140">
+					alt="Kids Umbrella" width="140" height="140">
 				</a>
 
 				<h2>KIDS:</h2>

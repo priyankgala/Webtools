@@ -31,12 +31,10 @@ public class Product {
 	private String productDescription;
 	
 	@Min(value = 0, message = "The product price must not be less then zero")
-	@NotEmpty(message = "Please enter some value!!!!")
 	private double productPrice;
 
 	@DecimalMin(value = "0.0", message="Enter a numeric value")
 	@Min(value = 0, message = "The product unit must not be less then zero")
-	@NotEmpty(message = "Please enter some value!!!!")
 	private int unitInStock;
 
 	@Transient

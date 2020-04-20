@@ -154,4 +154,28 @@ public class CartDao extends Dao {
 		}
 	}
 
+	public int updateProdcutByProductId(Product product, int productId) {
+		// TODO Auto-generated method stub
+		int result =0;
+		List<CartItem> cartList = new ArrayList<CartItem>();
+		try {
+			beginTransaction();
+			Query q = getSession().createQuery("from CartItem where productId = :id");
+			q.setInteger("id", productId);
+			cartList = q.list();
+			for(CartItem c: cartList) {
+				c.setTotalPrice(c.getQuantity()*product.getProductPrice());
+				System.out.println("*******************************************"+c.getTotalPrice());
+				getSession().save(c);
+				commit();
+			}
+			result = 1;
+		} catch (HibernateException e) {
+			rollbackTransaction();
+		} finally {
+			close();
+		}
+		return result;
+	}
+
 }
