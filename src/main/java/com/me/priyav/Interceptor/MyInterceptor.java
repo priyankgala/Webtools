@@ -25,13 +25,13 @@ public class MyInterceptor implements HandlerInterceptor {
 		}
 		logger.info(request.getRequestURI());
 		logger.info(""+request.getSession().getAttribute("userType"));
-		if(request.getRequestURI().contains("admin") && request.getSession().getAttribute("userType").equals("customer")) {
+		if(request.getRequestURI().contains("/admin/") && request.getSession().getAttribute("userType").equals("customer")) {
 			logger.info("Customer logged in : Not authenticated");
 			request.setAttribute("unsafe_check", "true");
 			logger.info("" + request.getAttribute("unsafe_check"));
 		}
 		
-		if(request.getRequestURI().contains("customer") && request.getSession().getAttribute("userType").equals("admin")) {
+		if(request.getRequestURI().contains("/customer/") && request.getSession().getAttribute("userType").equals("admin")) {
 			logger.info("Admin logged in : Not authenticated");
 			request.setAttribute("unsafe_check", "true");
 			logger.info("" + request.getAttribute("unsafe_check"));
