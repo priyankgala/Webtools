@@ -36,7 +36,7 @@ public class OrderController {
 
 	@Autowired
 	ProductDao pDao;
-	
+
 	@Autowired
 	CustomerDao cstDao;
 
@@ -184,7 +184,7 @@ public class OrderController {
 		Customer cust = cstDao.getCustomer(username);
 		Cart cart = cust.getCart();
 		if (cart.getGrandTotal() == 0) {
-			request.setAttribute("custCartId",cart.getCartId());
+			request.setAttribute("custCartId", cart.getCartId());
 			request.setAttribute("cartEmpty", "You don't have anything in your cart..!!!");
 			return "cart";
 		}
@@ -196,23 +196,25 @@ public class OrderController {
 		logger.info("Removing from the cart");
 		List<CartItem> list = cart.getCartItems();
 		List<CartItem> emaillist = cart.getCartItems();
+
+		logger.info("**************************************Email List is:" + emaillist);
 		for (int i = 0; i < emaillist.size(); i++) {
 			logger.info("Product unit in cost is:" + emaillist.get(i).getProduct().getUnitInStock());
 			if (cart.getCartItems().get(i).getQuantity() <= emaillist.get(i).getProduct().getUnitInStock()) {
 				logger.info("Product size is less or equal to the Units available. ");
 				Product prd = emaillist.get(i).getProduct();
 				int stock = prd.getUnitInStock();
-				prd.setUnitInStock(stock-1);
+				prd.setUnitInStock(stock - 1);
 				pDao.updateProduct(prd);
-				logger.info("****************************Update stock is:"+prd.getUnitInStock());
+				logger.info("****************************Update stock is:" + prd.getUnitInStock());
 			} else {
-				
-					/*
-					 * 
-					 * 
-					 * going back to cart with product list 
-					 * 
-					 * */
+
+				/*
+				 * 
+				 * 
+				 * going back to cart with product list
+				 * 
+				 */
 				logger.info("*********************Inside the else loop");
 				for (int j = 0; j < emaillist.size(); j++) {
 					total += emaillist.get(i).getTotalPrice();
@@ -220,19 +222,14 @@ public class OrderController {
 
 				request.setAttribute("grandTotal", total);
 				request.setAttribute("custCartId", cart.getCartId());
-				request.setAttribute("cartEmpty", "Product is out of Stock. Please try buying in few days !! Thank you..");
+				request.setAttribute("cartEmpty",
+						"Product is out of Stock. Please try buying in few days !! Thank you..");
 				model.addAttribute("cart", emaillist);
-				
+
 				return "cart";
 			}
 		}
-		for (int i = 0; i < list.size(); i++) {
-			list.remove(i);
-		}
-		cart.setGrandTotal(0);
-		cDao.save(cart);
-		logger.info("Cart ID is order confirmation is:" + cart.getCartId());
-		int res = cDao.removeProdcutByCartId(cart.getCartId());
+		logger.info("**************************************Email List is:" + emaillist);
 		// Sending Email
 		try {
 			logger.info("data successfully stored in tables: Customer, User, BillingAddress");
@@ -241,6 +238,16 @@ public class OrderController {
 		} catch (EmailException e) {
 			e.printStackTrace();
 		}
+
+		for (int i = 0; i < list.size(); i++) {
+			list.remove(i);
+		}
+
+		logger.info("**************************************Email List is:" + emaillist);
+		cart.setGrandTotal(0);
+		cDao.save(cart);
+		logger.info("Cart ID is order confirmation is:" + cart.getCartId());
+		int res = cDao.removeProdcutByCartId(cart.getCartId());
 
 		return "thankCustomer";
 	}
@@ -254,7 +261,18 @@ public class OrderController {
 			email.setSSLOnConnect(true);
 			email.setFrom("no-reply@msis.neu.edu");
 			email.setSubject("Your Order has been successfully placed");
-			email.setMsg("Thank you for shopping with us");
+			String message = "";
+			double cost = 0;
+			for (CartItem c : list) {
+				String productName = c.getProduct().getProductName();
+				int quantity = c.getQuantity();
+				double productCost = c.getProduct().getProductPrice();
+				cost = cost + c.getTotalPrice();
+				message = message + quantity + "* " + productName + " @ " + productCost + "$ each\n";
+				System.out.println("MEssage is *********************************************8" + message);
+			}
+			message = message + "\n Grand Total: " + cost;
+			email.setMsg("Thank you for shopping with us. Here are your order details\n" + message);
 			email.addTo(emailID);
 			email.send();
 		} catch (Exception ex) {
