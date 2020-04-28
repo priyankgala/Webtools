@@ -11,3 +11,11 @@ You can find more about the course at http://msis.neu.edu/spring2019/31237.pdf
      •	customer: who can view the product, compare with other products, add the desirable number in the cart and submit his/her order.
      •	guest: user who can view and compare the products but cannot add to the cart or buy the product 
 4.	The project utilized JavaScript, jQuery, Bootstrap, CSS and some online templating for screens. The front-end was designed to be user-friendly with proper display messages and alerts. front-end was kept to a minimum since the main goal of the project was to be able to understand the MVC framework and get hands-on experience with to access database objects using Hibernate.
+
+# Design & Considerations
+1. The project was built upon MVC framework(mainly Spring MVC) allowing for complete abstraction between the data model, the controller/business logic and the view accessible to users.
+
+# Running the application locally
+Once you have sucessfully downloaded the project, you can directly open and run the file in your Eclipse IDE
+
+To ensure a clean build, also install the Spring Tool Suite plugin(https://spring.io/tools)
